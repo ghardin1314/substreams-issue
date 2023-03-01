@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package masterfile.safe.v1;
+
+message SafeEvent {
+	oneof event {
+		AddedOwner added_owner = 1;
+		RemovedOwner removed_owner = 2;
+		ApproveHash approve_hash = 3;
+		ChangedFallbackHandler changed_fallback_handler = 4;
+		ChangedGuard changed_guard = 5;
+		ChangedThreshold changed_threshold = 6;
+		DisabledModule disabled_module = 7;
+		EnabledModule enabled_module = 8;
+		SafeModuleTransaction safe_module_transaction = 9;
+		SafeMultiSigTransaction safe_multisig_transaction = 10;
+		SafeReceived safe_received = 11;
+		SafeSetup safe_setup = 12;
+		SafeMsg safe_msg = 13;
+	}
+	string address = 100;
+	masterfile.common.v1.TransactionMetadata metadata = 101;
+	uint64 ordinal = 200;
+}
+
+message SafeEvents {
+	repeated SafeEvent events = 1;
+}
+
+/* Gnosis Safe Events */
+
+message AddedOwner {
+	string owner = 1;
+}
+
+
+message RemovedOwner {
+	string owner = 1;
+}
+
+message ApproveHash {
+	string owner = 1;
+	string hash = 2;
+}
+
+message ChangedFallbackHandler {
+	string handler = 1;
+}
+
+message ChangedGuard {
+	string guard = 1;
+}
+
+message ChangedThreshold {
+	uint64 threshold = 1;
+}
+
+message DisabledModule {
+	string module = 1;
+}
+
+message EnabledModule {
+	string module = 1;
+}
+
+// TODO: Consolidate Safe Tx Events into final output with status
+
+message ExecutionFailure {
+	string safe_tx_hash = 1;
+	string payment = 2;
+}
+
+message ExecutionFromModuleFailure {
+	string module = 1;
+}
+
+message ExecutionFromModuleSuccess {
+	string module = 1;
+}
+
+message ExecutionSuccess {
+	string safe_tx_hash = 1;
+	string payment = 2;
+}
+
+message SafeModuleTransaction {
+	string module = 1;
+	string safe_tx_to = 2;
+	string safe_tx_value = 3;
+	string safe_tx_data = 4;
+	uint32 operation = 5; // Maybe decode this into enum
+	oneof result {
+		ExecutionFromModuleFailure execution_failure = 6;
+		ExecutionFromModuleSuccess execution_success = 7;
+	}
+}
+
+message SafeMultiSigTransaction {
+	string to = 1;
+	string value = 2;
+	string data = 3;
+	uint64 operation = 4; // Maybe decode this into enum
+	string safe_tx_gas = 5;
+	string base_gas = 6;
+	string gas_price = 7;
+	string gas_token = 8;
+	string refund_receiver = 9;
+	string signatures = 10;
+	string additionalInfo = 11;
+	string safe_tx_hash = 12;
+	uint64 nonce = 13;
+	oneof result {
+		ExecutionFailure execution_failure = 14;
+		ExecutionSuccess execution_success = 15;
+	}
+}
+
+message SafeReceived {
+	string sender = 1;
+	string value = 2;
+}
+
+message SafeSetup {
+	string initiator = 1;
+	uint64 threshold = 2;
+	string initializer = 3;
+	string fallback_handler = 4;
+	repeated SafeOwner owners = 5;
+}
+
+message SafeOwner {
+	string address = 1;
+}
+
+message SafeMsg {
+	string msgHash = 1;
+}

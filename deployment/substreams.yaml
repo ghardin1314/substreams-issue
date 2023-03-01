@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/streamingfast/substreams/develop/schemas/manifest-schema.json
+specVersion: v0.1.0
+package:
+  name: "masterfile_deployment"
+  version: v0.1.0
+
+imports:
+  eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
+  factory: ../factory/masterfile-factory-v0.1.0.spkg
+
+protobuf:
+  files:
+    - common.proto
+    - deployment.proto
+  importPaths:
+    - ../common/proto
+    - ./proto/v1
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ../target/wasm32-unknown-unknown/release/deployment.wasm
+
+modules:
+  - name: map_deployments
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: factory:store_factories
+    output:
+      type: proto:masterfile.deployment.v1.Deployments
+
+  - name: store_deployments
+    kind: store
+    updatePolicy: set
+    valueType: proto:masterfile.deployment.v1.Deployment
+    inputs:
+      - map: map_deployments

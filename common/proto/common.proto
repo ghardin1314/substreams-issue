@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package masterfile.common.v1;
+
+message TransactionMetadata {
+	string tx_hash = 1;
+	uint64 block_number = 2;
+	uint64 block_timestamp = 3;
+	string to = 4;
+	string from = 5;
+	uint32 log_index = 6;
+	uint32 block_index = 7;
+}

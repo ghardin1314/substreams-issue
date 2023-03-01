@@ -1,0 +1,17 @@
+version: 3
+
+tasks:
+
+  build:
+    cmds:
+      - cargo build --target wasm32-unknown-unknown --release
+
+  run:
+    deps:
+      - build
+    cmds:
+      - substreams run -e polygon.streamingfast.io:443 substreams.yaml map_deployments --start-block 39146200 --stop-block 39146300
+
+  pack:
+    cmds:
+      - substreams pack ./substreams.yaml

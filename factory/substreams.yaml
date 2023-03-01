@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/streamingfast/substreams/develop/schemas/manifest-schema.json
+specVersion: v0.1.0
+package:
+  name: "masterfile_factory"
+  version: v0.1.0
+
+imports:
+  eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
+
+protobuf:
+  files:
+    - common.proto
+    - factory.proto
+  importPaths:
+    - ../common/proto
+    - ./proto/v1
+
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ../target/wasm32-unknown-unknown/release/factory.wasm
+
+modules:
+  - name: map_factories
+    kind: map
+    initialBlock: 39145378
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:masterfile.factory.v1.Factories
+
+  - name: store_factories
+    kind: store
+    updatePolicy: set
+    valueType: proto:masterfile.factory.v1.Factory
+    inputs:
+      - map: map_factories

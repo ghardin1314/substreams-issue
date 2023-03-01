@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package masterfile.factory.v1;
+
+message Factory {
+	oneof type {
+		ChannelFactory channel = 1;
+	}
+	string address = 100;
+	uint64 version = 101;
+	masterfile.common.v1.TransactionMetadata metadata = 102;
+	uint64 ordinal = 200;
+}
+
+message ChannelFactory {
+}
+
+
+message Factories {
+	repeated Factory factories = 1;
+}
+
+

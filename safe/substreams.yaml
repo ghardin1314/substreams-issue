@@ -1,0 +1,138 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/streamingfast/substreams/develop/schemas/manifest-schema.json
+specVersion: v0.1.0
+package:
+  name: "masterfile_safe"
+  version: v0.1.0
+
+imports:
+  eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
+  deployment: ../deployment/masterfile-deployment-v0.1.0.spkg
+
+protobuf:
+  files:
+    - common.proto
+    - safe.proto
+  importPaths:
+    - ../common/proto
+    - ./proto/v1
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ../target/wasm32-unknown-unknown/release/safe.wasm
+
+modules:
+  - name: map_added_owner
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_approve_hash
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_changed_fallback_handler
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_changed_guard
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_changed_threshold
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_disabled_module
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_enabled_module
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  # TODO!
+  # - name: map_module_transaction
+  #   kind: map
+  #   inputs:
+  #     - source: sf.ethereum.type.v2.Block
+  #     - store: deployment:store_deployments
+  #   output:
+  #     type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_multisig_transaction
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_removed_owner
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_safe_received
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_safe_setup
+    kind: map
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+      - store: deployment:store_deployments
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents
+
+  - name: map_safe_events
+    kind: map
+    inputs:
+      - map: map_added_owner
+      - map: map_approve_hash
+      - map: map_changed_fallback_handler
+      - map: map_changed_guard
+      - map: map_changed_threshold
+      - map: map_disabled_module
+      - map: map_enabled_module
+      # - map: map_module_transaction
+      - map: map_multisig_transaction
+      - map: map_removed_owner
+      - map: map_safe_received
+      - map: map_safe_setup
+    output:
+      type: proto:masterfile.safe.v1.SafeEvents

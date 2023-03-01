@@ -1,0 +1,18 @@
+version: 3
+
+includes:
+  factory:
+    taskfile: ./factory/Taskfile.yml
+    dir: ./factory
+
+  deployment:
+    taskfile: ./deployment/Taskfile.yml
+    dir: ./deployment
+
+  safe:
+    taskfile: ./safe/Taskfile.yml
+    dir: ./safe
+
+tasks:
+  build:
+    deps: [factory:build, deployment:build, safe:build]

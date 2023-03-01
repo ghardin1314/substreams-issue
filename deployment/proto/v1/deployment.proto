@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package masterfile.deployment.v1;
+
+message Deployment{
+	oneof type {
+		ChannelDeployment channel = 1;
+		SplitsDeployment splits = 2;
+		EditionsDirectDropDeployment editions_direct_drop = 3;
+	}
+	string address = 100;
+	uint64 version = 101;
+	masterfile.common.v1.TransactionMetadata metadata = 102;
+	uint64 ordinal = 200;
+}
+
+message ChannelDeployment {
+	string deployer = 1;
+}
+
+message SplitsDeployment {
+	string channel = 1;
+}
+
+message EditionsDirectDropDeployment {
+	string channel = 1;
+}
+
+message Deployments {
+	repeated Deployment deployments = 1;
+}
